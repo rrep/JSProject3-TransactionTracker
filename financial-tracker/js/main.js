@@ -30,15 +30,17 @@ document.querySelector('.frm-transactions').addEventListener('submit', function 
 
     //if there's already an error message get rid of it
     if(errorLabel.firstChild)
-    errorLabel.removeChild(errorLabel.firstChild);
+        errorLabel.removeChild(errorLabel.firstChild);
 
     //retrieve values
     let descriptionInput = evt.target.elements['description'].value;
     let typeInput = evt.target.elements['type'].value;
-    let currencyInput = Number.parseFloat(evt.target.elements['currency'].value).toFixed(2);
+    let currencyInput = (Number.parseFloat(evt.target.elements['currency'].value)||0).toFixed(2);
+
+
    
     //validate form input
-    if (!descriptionInput || currencyInput<0 || (typeInput != 'credit' && typeInput !=  'debit')){
+    if (!descriptionInput || (currencyInput<=0) || (typeInput != 'credit' && typeInput !=  'debit')){
         let errorMessages = document.createElement('p');
         let firstMessage = document.createTextNode("Please correct the following errors:");
         let errorList = document.createElement('ul');
@@ -58,7 +60,7 @@ document.querySelector('.frm-transactions').addEventListener('submit', function 
             amountErrorItem.appendChild(amountErrorMessage);
             errorList.appendChild(amountErrorItem);
         }
-        if (currencyInput<0){
+        if (currencyInput<=0){
             let currencyErrorItem = document.createElement('li');
             let currencyErrorMessage = document.createTextNode("Amount must be positive.")
             currencyErrorItem.appendChild(currencyErrorMessage);
@@ -79,7 +81,7 @@ document.querySelector('.frm-transactions').addEventListener('submit', function 
                 let newDebitTotal = document.createTextNode("$"+totalDebits.toFixed(2));
                 totalDebitSpan.appendChild(newDebitTotal);
                 break;
-            }
+        }
         totalCreditSpan.childNodes[0].value = "$" + totalCredits;
 
         //create variables for new line item
@@ -166,7 +168,7 @@ transactionTable.addEventListener('click', function (evt) {
                     let newDebitTotal = document.createTextNode("$"+totalDebits.toFixed(2));
                     totalDebitSpan.appendChild(newDebitTotal);
                     break;
-                }
+            }
         }
     }
 });
